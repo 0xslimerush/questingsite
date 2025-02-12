@@ -143,3 +143,44 @@
 .quest-opt-in-btn:hover::after {
     transform: scale(1);
 }
+
+/* Add shimmer effect to completed quests */
+.quest-card.completed::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 25%,
+        rgba(157, 0, 255, 0.1) 50%,
+        transparent 75%
+    );
+    animation: shimmer 2s infinite linear;
+}
+
+/* Add cyber terminal effect to progress bars */
+.progress-bar-inner {
+    background: linear-gradient(90deg, #9d00ff 0%, #ff00ff 100%);
+    box-shadow: 0 0 10px rgba(157, 0, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar-inner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    animation: scan 1.5s infinite linear;
+}

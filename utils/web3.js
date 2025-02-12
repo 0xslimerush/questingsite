@@ -1,5 +1,5 @@
-const ALCHEMY_API_KEY = 'your_alchemy_api_key'; // Replace with your Alchemy API key
-const ALCHEMY_NETWORK = 'monad-testnet'; // Replace with actual network name when available
+const ALCHEMY_API_KEY = 'your-alchemy-key'; // Replace with actual key
+const ALCHEMY_NETWORK = 'maticmum'; // Update for Monad testnet when available
 
 const contractABIs = {
     questRegistry: [
@@ -9,6 +9,13 @@ const contractABIs = {
         "function getQuestProgress(address user, uint256 questId) external view returns (uint256)",
         "function syncProgress(address user, uint256 questId) external"
     ]
+};
+
+export const initAlchemyProvider = () => {
+    return new ethers.providers.AlchemyProvider(
+        ALCHEMY_NETWORK,
+        ALCHEMY_API_KEY
+    );
 };
 
 async function createAlchemyProvider() {

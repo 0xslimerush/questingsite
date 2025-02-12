@@ -1,3 +1,34 @@
+const ORG_STORAGE_KEY = 'monad-quest-organizations';
+const QUEST_STORAGE_KEY = 'monad-quest-quests';
+
+export const saveOrganization = async (orgData) => {
+    const orgs = JSON.parse(localStorage.getItem(ORG_STORAGE_KEY) || '[]');
+    const existing = orgs.find(o => o.address === orgData.address);
+    if (!existing) {
+        orgs.push(orgData);
+        localStorage.setItem(ORG_STORAGE_KEY, JSON.stringify(orgs));
+    }
+    return orgData;
+};
+
+export const getOrganizations = async () => {
+    return JSON.parse(localStorage.getItem(ORG_STORAGE_KEY) || '[]');
+};
+
+export const saveQuest = async (questData) => {
+    const quests = JSON.parse(localStorage.getItem(QUEST_STORAGE_KEY) || '[]');
+    const existing = quests.find(q => q.id === questData.id);
+    if (!existing) {
+        quests.push(questData);
+        localStorage.setItem(QUEST_STORAGE_KEY, JSON.stringify(quests));
+    }
+    return questData;
+};
+
+export const getQuests = async () => {
+    return JSON.parse(localStorage.getItem(QUEST_STORAGE_KEY) || '[]');
+};
+
 async function saveUserRole(address, role) {
     try {
         const objectType = 'user-role';
@@ -48,27 +79,6 @@ async function getUserProgress(userAddress) {
             acc[item.objectData.questId] = item.objectData.progress;
             return acc;
         }, {});
-    } catch (error) {
-        reportError(error);
-        throw error;
-    }
-}
-
-async function saveOrganization(orgData) {
-    try {
-        const objectType = 'organization';
-        await trickleCreateObject(objectType, orgData);
-    } catch (error) {
-        reportError(error);
-        throw error;
-    }
-}
-
-async function getOrganizations() {
-    try {
-        const objectType = 'organization';
-        const { items } = await trickleListObjects(objectType, 100, true);
-        return items.map(item => item.objectData);
     } catch (error) {
         reportError(error);
         throw error;

@@ -42,7 +42,7 @@ function QuestCard({ quest, userAddress, onQuestComplete }) {
             <div data-name="quest-card" className={cardClassName}>
                 <div data-name="quest-header" className="flex justify-between items-start mb-4">
                     <div>
-                        <h3 data-name="quest-title" className="text-xl font-bold gradient-text">{title}</h3>
+                        <h3 data-name="quest-title" className="text-xl font-bold gradient-text glow-text">{title}</h3>
                         <p data-name="quest-org" className="text-sm text-purple-300">by {organization}</p>
                     </div>
                     <span data-name="quest-reward" className="quest-reward-badge px-3 py-1 rounded-full text-purple-300 text-sm">
@@ -57,7 +57,7 @@ function QuestCard({ quest, userAddress, onQuestComplete }) {
                     </div>
                     <div className="progress-bar">
                         <div 
-                            className="progress-fill" 
+                            className="progress-bar-inner" 
                             style={{ width: `${(progress / maxProgress) * 100}%` }}
                         ></div>
                     </div>
@@ -82,6 +82,11 @@ function QuestCard({ quest, userAddress, onQuestComplete }) {
                         ? 'Opting In...'
                         : 'Opt In to Quest'}
                 </button>
+                {/* Add holographic effect on hover */}
+                <div className="quest-hologram">
+                    <div className="hologram-grid"></div>
+                    <div className="hologram-line"></div>
+                </div>
             </div>
         );
     } catch (error) {
