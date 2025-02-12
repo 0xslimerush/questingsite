@@ -1,5 +1,7 @@
 const ORG_STORAGE_KEY = 'monad-quest-organizations';
 const QUEST_STORAGE_KEY = 'monad-quest-quests';
+const USER_ROLE_KEY = 'monad-quest-user-roles';
+const USER_PROGRESS_KEY = 'monad-quest-user-progress';
 
 export const saveOrganization = async (orgData) => {
     const orgs = JSON.parse(localStorage.getItem(ORG_STORAGE_KEY) || '[]');
@@ -29,58 +31,25 @@ export const getQuests = async () => {
     return JSON.parse(localStorage.getItem(QUEST_STORAGE_KEY) || '[]');
 };
 
-async function saveUserRole(address, role) {
-    try {
-        const objectType = 'user-role';
-        await trickleCreateObject(objectType, {
-            address,
-            role,
-            timestamp: new Date().toISOString()
-        });
-    } catch (error) {
-        reportError(error);
-        throw error;
-    }
+export async function saveUserRole(address, role) {
+    const roles = JSON.parse(localStorage.getItem(USER_ROLE_KEY) || '{}');
+    roles[address.toLowerCase()] = role;
+    localStorage.setItem(USER_ROLE_KEY, JSON.stringify(roles));
 }
 
-async function getUserRole(address) {
-    try {
-        const objectType = 'user-role';
-        const { items } = await trickleListObjects(objectType, 1, true);
-        const userRole = items.find(item => item.objectData.address === address);
-        return userRole ? userRole.objectData.role : null;
-    } catch (error) {
-        reportError(error);
-        throw error;
-    }
+export async function getUserRole(address) {
+    const roles = JSON.parse(localStorage.getItem(USER_ROLE_KEY) || '{}');
+    return roles[address.toLowerCase()] || null;
 }
 
-async function saveUserProgress(userAddress, questId, progress) {
-    try {
-        const objectType = `progress:${userAddress}`;
-        const progressData = {
-            questId,
-            progress,
-            timestamp: new Date().toISOString()
-        };
-        
-        await trickleCreateObject(objectType, progressData);
-    } catch (error) {
-        reportError(error);
-        throw error;
-    }
+export async function saveUserProgress(userAddress, questId, progress) {
+    const key = `${USER_PROGRESS_KEY}:${userAddress.toLowerCase()}`;
+    const progressData = JSON.parse(localStorage.getItem(key) || '{}');
+    progressData[questId] = progress;
+    localStorage.setItem(key, JSON.stringify(progressData));
 }
 
-async function getUserProgress(userAddress) {
-    try {
-        const objectType = `progress:${userAddress}`;
-        const { items } = await trickleListObjects(objectType, 100, true);
-        return items.reduce((acc, item) => {
-            acc[item.objectData.questId] = item.objectData.progress;
-            return acc;
-        }, {});
-    } catch (error) {
-        reportError(error);
-        throw error;
-    }
+export async function getUserProgress(userAddress) {
+    const key = `${USER_PROGRESS_KEY}:${userAddress.toLowerCase()}`;
+    return JSON.parse(localStorage.getItem(key) || '{}');
 }
